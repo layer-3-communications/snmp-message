@@ -1,0 +1,25 @@
+cabal-version: 3.0
+name: snmp-message
+version: 0.1.0.0
+license: NONE
+author: Eric Demko
+maintainer: edemko@layer3com.com
+copyright: 2020 Eric Demko
+category: Data
+build-type: Simple
+extra-source-files: CHANGELOG.md
+
+library
+  exposed-modules:
+      Snmp
+  -- other-modules:
+  -- other-extensions:
+  build-depends:
+    , asn1-ber-syntax
+    , base >=4.14 && <4.15
+    , byteslice
+    , ip >=1.7
+    , primitive
+  hs-source-dirs: src
+  default-language: Haskell2010
+  ghc-options: -O2 -threaded -rtsopts

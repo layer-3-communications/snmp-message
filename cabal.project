@@ -1,0 +1,6 @@
+packages: .
+
+source-repository-package
+  type: git
+  location: https://github.com/andrewthad/asn1-ber-syntax
+  tag: 278fdbf70122d1977c8e6f0a636184225b05912f
