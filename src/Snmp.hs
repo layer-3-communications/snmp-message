@@ -1,11 +1,12 @@
-{-# language ApplicativeDo #-}
-{-# language DuplicateRecordFields #-}
-{-# language LambdaCase #-}
-{-# language NamedFieldPuns #-}
-{-# language TypeApplications #-}
+{-# LANGUAGE ApplicativeDo #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Snmp
-  ( Message(..)
+  ( ObjectId
+  , Message(..)
   , SomePdu(..)
   , Pdu(..)
   , BulkPdu(..)
@@ -41,7 +42,7 @@ data Message = Message
   , community :: Bytes
   , pdu :: SomePdu
   }
-  deriving(Show)
+  deriving(Show,Eq)
 
 ------ PDUs ------
 
@@ -53,7 +54,7 @@ data SomePdu
   | Response Pdu
   | InformRequest Pdu
   | Trap Pdu
-  deriving(Show)
+  deriving(Show,Eq)
 
 data Pdu = Pdu
   { requestId :: Int32
@@ -61,7 +62,7 @@ data Pdu = Pdu
   , errorIndex :: Int
   , varBinds :: SmallArray VarBind
   }
-  deriving(Show)
+  deriving(Show,Eq)
 
 data BulkPdu = BulkPdu
   { requestId :: Int32
@@ -69,7 +70,7 @@ data BulkPdu = BulkPdu
   , maxRepetitions :: Word32
   , varBinds :: SmallArray VarBind
   }
-  deriving(Show)
+  deriving(Show,Eq)
 
 ------ Variable Bindings ------
 
@@ -77,7 +78,7 @@ data VarBind = VarBind
   { name :: ObjectId
   , result :: VarBindResult
   }
-  deriving(Show)
+  deriving(Show,Eq)
 
 data VarBindResult
   = IntVal Int32
@@ -93,7 +94,7 @@ data VarBindResult
   | NoSuchObject
   | NoSuchInstance
   | EndOfMibView
-  deriving(Show)
+  deriving(Show,Eq)
 
 data ErrorStatus
   = NoError
@@ -135,11 +136,11 @@ resoveMessage = Asn.sequence >-> do
   resolveSomePdu = Asn.chooseTag
     [ (ContextSpecific, 0, GetRequest <$> pdu)
     , (ContextSpecific, 1, GetNextRequest <$> pdu)
-    , (ContextSpecific, 2, GetBulkRequest <$> bulkPdu)
-    , (ContextSpecific, 3, Response <$> pdu)
-    , (ContextSpecific, 4, SetRequest <$> pdu)
-    , (ContextSpecific, 5, InformRequest <$> pdu)
-    , (ContextSpecific, 6, Trap <$> pdu)
+    , (ContextSpecific, 5, GetBulkRequest <$> bulkPdu)
+    , (ContextSpecific, 2, Response <$> pdu)
+    , (ContextSpecific, 3, SetRequest <$> pdu)
+    , (ContextSpecific, 6, InformRequest <$> pdu)
+    , (ContextSpecific, 7, Trap <$> pdu)
     ]
   pdu :: Asn.Parser Value Pdu
   pdu = Asn.sequence >-> do

@@ -23,3 +23,20 @@ library
   hs-source-dirs: src
   default-language: Haskell2010
   ghc-options: -O2 -threaded -rtsopts
+
+test-suite test
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Main.hs
+  ghc-options: -Wall -O2
+  build-depends:
+    , base >=4.12.0.0 && <5
+    , byteslice
+    , ip >=1.7
+    , primitive
+    , quickcheck-classes-base >=0.6
+    , snmp-message
+    , tasty >=1.2.3
+    , tasty-hunit >=0.10.0.2
+    , tasty-quickcheck >=0.10
