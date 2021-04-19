@@ -3,4 +3,4 @@ packages: .
 source-repository-package
   type: git
   location: https://github.com/andrewthad/asn1-ber-syntax
-  tag: 9d917202d5d2d1b0ebfad3b61f5f4abc99bba884
+  tag: aececb81905133b17332fe5884b5b88e6b4fd9cd

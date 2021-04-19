@@ -5,8 +5,7 @@
 {-# LANGUAGE TypeApplications #-}
 
 module Snmp
-  ( ObjectId
-  , Message(..)
+  ( Message(..)
   , SomePdu(..)
   , Pdu(..)
   , BulkPdu(..)
@@ -18,6 +17,7 @@ module Snmp
   ) where
 
 import Asn.Ber (Value(..),Contents(..),Class(..))
+import Asn.Oid (Oid(..))
 import Asn.Resolve.Category ((>->))
 import Control.Monad ((<=<))
 import Data.Bifunctor (first)
@@ -34,8 +34,6 @@ import qualified Data.Bytes as Bytes
 import qualified Data.Primitive as Prim
 import qualified Net.IPv4 as IPv4
 
-
-type ObjectId = PrimArray Word32 -- FIXME there really should be an ObjectId type in Asn module
 
 data Message = Message
   { version :: Int
@@ -75,7 +73,7 @@ data BulkPdu = BulkPdu
 ------ Variable Bindings ------
 
 data VarBind = VarBind
-  { name :: ObjectId
+  { name :: Oid
   , result :: VarBindResult
   }
   deriving(Show,Eq)
@@ -83,7 +81,7 @@ data VarBind = VarBind
 data VarBindResult
   = IntVal Int32
   | StrVal Bytes
-  | OidVal ObjectId
+  | OidVal Oid
   | IpVal IPv4
   | CounterVal Word32
   | UIntVal Word32
