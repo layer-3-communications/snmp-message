@@ -11,6 +11,7 @@ module Main (main) where
 
 import Snmp
 
+import Asn.Oid (Oid(Oid))
 import Data.Bytes (Bytes)
 import Data.Word (Word8,Word32)
 import Net.IPv4 (IPv4,ipv4)
@@ -27,8 +28,8 @@ main = defaultMain tests
 tests :: TestTree
 tests = testGroup "Tests"
   [ testProperty "codec round-trip" $ \val ->
-    let bs = encode val
-        val' = decode bs
+    let bs = encodeMessage val
+        val' = decodeMessage bs
      in val' === Right val
   ]
 
@@ -39,7 +40,7 @@ instance Arbitrary Message where
     pdu <- arbitrary
     pure Message{version,community,pdu}
 
-instance Arbitrary SomePdu where
+instance Arbitrary Pdus where
   arbitrary = TQC.oneof
     [ GetRequest <$> arbitrary
     , GetNextRequest <$> arbitrary
@@ -120,9 +121,9 @@ instance Arbitrary Bytes where
 instance Arbitrary IPv4 where
   arbitrary = ipv4 <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
-instance Arbitrary ObjectId where
+instance Arbitrary Oid where
   arbitrary = do
     b1 <- TQC.elements [0..2]
     b2 <- TQC.elements [0..39]
     bs :: [Word32] <-  arbitrary
-    pure $ Prim.primArrayFromList (b1:b2:bs)
+    pure $ Oid $ Prim.primArrayFromList (b1:b2:bs)
