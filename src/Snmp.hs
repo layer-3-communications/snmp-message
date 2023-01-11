@@ -28,9 +28,12 @@ module Snmp
   , pattern NoAuthProtocol
   , pattern HmacMd5AuthProtocol
   , pattern HmacShaAuthProtocol
+  , pattern HmacSha256AuthProtocol
+  , pattern HmacSha512AuthProtocol
     -- * Priv Protocols
   , pattern DesPrivProtocol
   , pattern NoPrivProtocol
+  , pattern Aes256PrivProtocol
     -- * Codec
   , encodeMessage
   , encodeMessageV3
@@ -387,6 +390,15 @@ pattern HmacMd5AuthProtocol = AuthProtocol 2
 pattern HmacShaAuthProtocol :: AuthProtocol
 pattern HmacShaAuthProtocol = AuthProtocol 3
 
+pattern HmacSha256AuthProtocol :: AuthProtocol
+pattern HmacSha256AuthProtocol = AuthProtocol 6
+
+pattern HmacSha512AuthProtocol :: AuthProtocol
+pattern HmacSha512AuthProtocol = AuthProtocol 7
+
+-- | Note: The extended privacy protocols like AES256 are not in the
+-- same namespace as DES. We cannot add AES128 without changing how
+-- this is done. I am not worried about this for now.
 newtype PrivProtocol = PrivProtocol Word8
   deriving newtype Eq
 
@@ -395,6 +407,9 @@ pattern NoPrivProtocol = PrivProtocol 1
 
 pattern DesPrivProtocol :: PrivProtocol
 pattern DesPrivProtocol = PrivProtocol 2
+
+pattern Aes256PrivProtocol :: PrivProtocol
+pattern Aes256PrivProtocol = PrivProtocol 4
 
 data ScopedPduData
   = ScopedPduDataPlaintext !ScopedPdu
