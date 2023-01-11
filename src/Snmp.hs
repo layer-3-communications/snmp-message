@@ -31,8 +31,9 @@ module Snmp
   , pattern HmacSha256AuthProtocol
   , pattern HmacSha512AuthProtocol
     -- * Priv Protocols
-  , pattern DesPrivProtocol
   , pattern NoPrivProtocol
+  , pattern DesPrivProtocol
+  , pattern AesPrivProtocol
   , pattern Aes256PrivProtocol
     -- * Codec
   , encodeMessage
@@ -408,8 +409,11 @@ pattern NoPrivProtocol = PrivProtocol 1
 pattern DesPrivProtocol :: PrivProtocol
 pattern DesPrivProtocol = PrivProtocol 2
 
+pattern AesPrivProtocol :: PrivProtocol
+pattern AesPrivProtocol = PrivProtocol 4
+
 pattern Aes256PrivProtocol :: PrivProtocol
-pattern Aes256PrivProtocol = PrivProtocol 4
+pattern Aes256PrivProtocol = PrivProtocol 104
 
 data ScopedPduData
   = ScopedPduDataPlaintext !ScopedPdu
